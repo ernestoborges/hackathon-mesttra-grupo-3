@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/novo-paciente", async (req, res) => {
+router.post("/", async (req, res) => {
     const { nome, dataNascimento } = req.body;
     if (!nome || !dataNascimento) return res.status(400).json({ message: "Dados faltando." })
 
@@ -43,6 +43,37 @@ router.post("/novo-paciente", async (req, res) => {
         return res.status(201).json({ message: "Paciente criado", paciente: novoPaciente });
     } catch (error) {
         return res.status(500).json({ message: 'Erro ao criar novo paciente', error });
+    }
+});
+
+router.put("/:id", async (req, res) => {
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: "Parâmetro faltando." })
+
+    const { nome, dataNascimento } = req.body;
+    if (!nome && !dataNascimento) return res.status(400).json({ message: "Dados faltando." })
+
+    try {
+        let pacienteEncontrado = await Paciente.findOne({
+            where: { id_paciente: id }
+        })
+
+        await Paciente.update({
+            nome: nome ? nome : pacienteEncontrado.nome,
+            data_nascimento: dataNascimento ? dataNascimento : pacienteEncontrado.data_nascimento
+        }, {
+            where: { id_paciente: id }
+        })
+
+        const pacienteAtualizado = await Paciente.findByPk(id);
+
+        return res.status(201).json({
+            message: "Paciente atualizado",
+            anterior: pacienteEncontrado,
+            novo: pacienteAtualizado
+        });
+    } catch (error) {
+        return res.status(500).json({ message: 'Erro ao atualizar paciente', error });
     }
 });
 
