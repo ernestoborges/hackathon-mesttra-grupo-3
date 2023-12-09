@@ -1,7 +1,7 @@
 {
     "main": "src/api.js",
     "scripts": {
-        "start": "node src/api.js"
+        "start": "node --watch src/api.js"
     },
     "dependencies": {
         "dotenv": "^16.3.1",
