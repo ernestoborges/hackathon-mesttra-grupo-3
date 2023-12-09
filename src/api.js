@@ -1,14 +1,11 @@
 const { sequelize } = require("./db/connect")
 const express = require("express");
 const app = express()
+const router = require("./routes/index")
 
 app.use(express.json())
 
-const olaGrupo = require("./routes/olaGrupo.js");
-
-// Juntar ao app as rotas dos arquivos
-app.use("/", olaGrupo)
-
+app.use("/", router)
 
 async function test() {
     try {
