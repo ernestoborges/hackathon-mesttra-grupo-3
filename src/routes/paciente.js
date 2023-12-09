@@ -5,12 +5,21 @@ const router = Router();
 
 router.get("/:id", async (req, res) => {
     try {
-        const listarPacientes = await Paciente.findOne({
+        const pacientes = await Paciente.findOne({
             where: { id_paciente: req.params.id }
         });
 
-        res.status(200).json(listarPacientes)
+        res.status(200).json(pacientes)
     } catch (error) {
+        res.status(500).json({ message: `Erro ao buscar paciente: ${error}` })
+    }
+});
+
+router.get("/", async (req, res) => {
+    try{
+        const listarPacientes = await Paciente.findAll();
+        res.status(200).json(listarPacientes)
+    }catch (error) {
         res.status(500).json({ message: `Erro ao buscar paciente: ${error}` })
     }
 });
