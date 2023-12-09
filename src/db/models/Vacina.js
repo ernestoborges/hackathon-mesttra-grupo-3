@@ -2,34 +2,34 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require("../connect")
 
 const Vacina = sequelize.define('Vacina', {
-    ID_VACINA: {
+    id_vacina: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
     },
-    VACINA: {
+    vacina: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    SIGLA_VACINA: {
+    sigla_vacina: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    DOENCA_PROTECAO: {
+    doenca_protecao: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    DOSE: {
+    dose: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-    ID_REDE: {
+    id_rede: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
 }, {
-    tableName: 'VACINA',
-    timestamps: false,
+    tableName: 'vacina',
+    timestamps: false,
 });
 
 module.exports = {

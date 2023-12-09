@@ -13,7 +13,7 @@ const PeriodoAplicacaoMes = sequelize.define('PeriodoAplicacaoMes', {
     allowNull: false,
     references: {
       model: Vacina,
-      key: 'ID_VACINA',
+      key: 'id_vacina',
     },
   },
   qtd_meses_inicial: {

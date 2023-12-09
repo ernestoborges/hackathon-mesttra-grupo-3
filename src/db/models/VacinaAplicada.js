@@ -10,7 +10,7 @@ const VacinaAplicada = sequelize.define('VacinaAplicada', {
     primaryKey: true,
     references: {
       model: Paciente,
-      key: 'ID_PACIENTE',
+      key: 'id_paciente',
     },
     onUpdate: 'restrict',
     onDelete: 'restrict',
@@ -21,7 +21,7 @@ const VacinaAplicada = sequelize.define('VacinaAplicada', {
     primaryKey: true,
     references: {
       model: Vacina,
-      key: 'ID_VACINA',
+      key: 'id_vacina',
     },
     onUpdate: 'restrict',
     onDelete: 'restrict',
