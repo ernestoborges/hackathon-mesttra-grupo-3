@@ -13,7 +13,7 @@ const PeriodoAplicacaoAno = sequelize.define('PeriodoAplicacaoAno', {
         allowNull: false,
         references: {
             model: Vacina,
-            key: 'ID_VACINA',
+            key: 'id_vacina',
         },
         onUpdate: 'restrict',
         onDelete: 'restrict',
