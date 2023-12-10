@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
         dose,
         rede
     } = req.body
-
+    console.log(req.body)
     if (!vacina || !sigla || !doencaProtecao || !dose || !rede) return res.status(400).json({ message: "Parametro faltando." })
 
     try {
@@ -61,7 +61,7 @@ router.post("/", async (req, res) => {
         const redeEncontrada = await Rede.findByPk(rede)
         if (!redeEncontrada) return res.status(400).json({ message: "A Rede enviada não está cadastrada." })
 
-        let maiorId = await Paciente.max("id_paciente")
+        let maiorId = await Vacina.max("id_vacina")
         const novaVacina = await Vacina.create({
             id_vacina: maiorId + 1,
             vacina,
@@ -86,8 +86,6 @@ router.put("/", async (req, res) => {
         dose,
         rede
     } = req.body
-
-
     if (!idVacina) {
         if (!vacina) {
             return res.status(400).json({ message: "Vacina não informada." })
@@ -106,10 +104,10 @@ router.put("/", async (req, res) => {
         }
         if (!vacinaEncontrada) return res.status(400).json({ message: "Vacina não cadastrada." })
 
-        if (sigla) {
-            const siglaEncontrada = await Vacina.findOne({ where: { sigla_vacina: sigla } });
-            if (siglaEncontrada) return res.status(400).json({ message: "Sigla já em uso." })
-        }
+        // if (sigla) {
+        //     const siglaEncontrada = await Vacina.findOne({ where: { sigla_vacina: sigla } });
+        //     if (siglaEncontrada) return res.status(400).json({ message: "Sigla já em uso." })
+        // }
 
         if (rede) {
             const redeEncontrada = await Rede.findByPk(rede)
@@ -124,10 +122,10 @@ router.put("/", async (req, res) => {
             dose: dose ? dose : vacinaEncontrada.dose,
             id_rede: rede ? rede : vacinaEncontrada.id_rede
         }, {
-            where: { id_paciente: id }
+            where: { id_vacina: idVacina }
         })
 
-        const vacinaAtualizada = await Vacina.findByPk(id_vacina);
+        const vacinaAtualizada = await Vacina.findByPk(idVacina );
 
         return res.status(201).json({
             message: "Vacina atualizada",
@@ -145,6 +143,8 @@ router.delete("/:id", async (req, res) => {
         if (vacinaDel) {
             await Vacina.destroy({ where: { id_vacina: req.params.id } });
             res.json({ message: "Vacina deletada com sucesso." });
+        } else{
+            res.status(404).json({ message: "Vacina não encontrada." });
         }
     } catch (error) {
         res.status(500).json({ message: `Erro ao deletar a vacina ${error}` })
