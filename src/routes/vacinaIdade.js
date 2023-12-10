@@ -53,6 +53,54 @@ router.get("/ano/com/:ano", async (req, res) => {
     }
 });
 
+router.post("/ano", async (req, res) => {
+
+    const { idVacina, qtdAnoInicial, qtdAnoFinal, descricao } = req.body;
+
+    if (!idVacina || !qtdAnoInicial || !qtdAnoFinal || !descricao) return res.send(400).json({ message: "Parametro faltando." })
+
+    try {
+        const periodoAnoEncontrado = await PeriodoAplicacaoAno({ where: { id_vacina } })
+        if (periodoAnoEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
+
+        const periodoMesEncontrado = await PeriodoAplicacaoMes({ where: { id_vacina } })
+        if (periodoMesEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
+
+
+        let maiorId = await PeriodoAplicacaoAno.max("id")
+        const novoPeriodo = await PeriodoAplicacaoAno.create({
+            id: maiorId + 1,
+            id_vacina: idVacina,
+            qtd_ano_inicial: qtdAnoInicial,
+            qtd_ano_final: qtdAnoFinal,
+            descricao: descricao
+        })
+
+        return res.status(201).json({ message: "Periodo de vacinação (ano) criado.", periodo: novoPeriodo });
+    } catch (error) {
+        res.status(500).json({ message: `Erro ao criar periodo de vacinação (ano): ${error}` })
+    }
+});
+
+router.delete("/ano/:id", async (req, res) => {
+
+    const id = req.params.id;
+
+    if (!id) return res.send(400).json({ message: "Parametro faltando." })
+
+    try {
+        const periodosDeletados = await PeriodoAplicacaoAno.destroy({
+            where: { id },
+        });
+
+        if (!periodosDeletados) return res.status(404).json({ error: 'Nenhuma periodo de vacina encontrada para exclusão' });
+
+        return res.status(200).json({ message: 'Periodo de vacina (ano) excluído com sucesso' });
+    } catch (error) {
+        res.status(500).json({ message: `Erro ao excluir periodo de vacinação (ano): ${error}` })
+    }
+});
+
 router.get("/mes/ate/:mes", async (req, res) => {
 
     const mes = req.params.mes;
@@ -98,6 +146,55 @@ router.get("/mes/com/:mes", async (req, res) => {
         res.status(200).json(vacinas)
     } catch (error) {
         res.status(500).json({ message: `Erro ao buscar vacina por idade (mes): ${error}` })
+    }
+});
+
+router.post("/mes", async (req, res) => {
+
+    const { idVacina, qtdMesInicial, qtdMesFinal, descricao } = req.body;
+
+    if (!idVacina || !qtdMesInicial || !qtdMesFinal || !descricao) return res.send(400).json({ message: "Parametro faltando." })
+
+    try {
+        const periodoAnoEncontrado = await PeriodoAplicacaoAno({ where: { id_vacina } })
+        if (periodoAnoEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
+
+        const periodoMesEncontrado = await PeriodoAplicacaoMes({ where: { id_vacina } })
+        if (periodoMesEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
+
+
+        let maiorId = await PeriodoAplicacaoMes.max("id")
+        const novoPeriodo = await PeriodoAplicacaoMes.create({
+            id: maiorId + 1,
+            id_vacina: idVacina,
+            qtd_meses_inicial: qtdMesInicial,
+            qtd_meses_final: qtdMesFinal,
+            descricao: descricao
+        })
+
+        return res.status(201).json({ message: "Periodo de vacinação (mes) criado.", periodo: novoPeriodo });
+    } catch (error) {
+        res.status(500).json({ message: `Erro ao criar periodo de vacinação (mes): ${error}` })
+    }
+});
+
+
+router.delete("/mes/:id", async (req, res) => {
+
+    const id = req.params.id;
+
+    if (!id) return res.send(400).json({ message: "Parametro faltando." })
+
+    try {
+        const periodosDeletados = await PeriodoAplicacaoMes.destroy({
+            where: { id },
+        });
+
+        if (!periodosDeletados) return res.status(404).json({ error: 'Nenhuma periodo de vacina encontrada para exclusão' });
+
+        return res.status(200).json({ message: 'Periodo de vacina (mes) excluído com sucesso' });
+    } catch (error) {
+        res.status(500).json({ message: `Erro ao excluir periodo de vacinação (mes): ${error}` })
     }
 });
 
