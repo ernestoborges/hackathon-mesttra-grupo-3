@@ -57,13 +57,13 @@ router.post("/ano", async (req, res) => {
 
     const { idVacina, qtdAnoInicial, qtdAnoFinal, descricao } = req.body;
 
-    if (!idVacina || !qtdAnoInicial || !qtdAnoFinal || !descricao) return res.send(400).json({ message: "Parametro faltando." })
+    if (!idVacina || !qtdAnoInicial || !qtdAnoFinal || !descricao) return res.status(400).json({ message: "Parametro faltando." })
 
     try {
-        const periodoAnoEncontrado = await PeriodoAplicacaoAno({ where: { id_vacina } })
+        const periodoAnoEncontrado = await PeriodoAplicacaoAno.findAll({ where: { id_vacina: idVacina } })
         if (periodoAnoEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
 
-        const periodoMesEncontrado = await PeriodoAplicacaoMes({ where: { id_vacina } })
+        const periodoMesEncontrado = await PeriodoAplicacaoMes.findAll({ where: { id_vacina: idVacina } })
         if (periodoMesEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
 
 
@@ -73,7 +73,7 @@ router.post("/ano", async (req, res) => {
             id_vacina: idVacina,
             qtd_ano_inicial: qtdAnoInicial,
             qtd_ano_final: qtdAnoFinal,
-            descricao: descricao
+            desc_ano: descricao
         })
 
         return res.status(201).json({ message: "Periodo de vacinação (ano) criado.", periodo: novoPeriodo });
@@ -156,10 +156,10 @@ router.post("/mes", async (req, res) => {
     if (!idVacina || !qtdMesInicial || !qtdMesFinal || !descricao) return res.send(400).json({ message: "Parametro faltando." })
 
     try {
-        const periodoAnoEncontrado = await PeriodoAplicacaoAno({ where: { id_vacina } })
+        const periodoAnoEncontrado = await PeriodoAplicacaoAno({ where: { idVacina } })
         if (periodoAnoEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
 
-        const periodoMesEncontrado = await PeriodoAplicacaoMes({ where: { id_vacina } })
+        const periodoMesEncontrado = await PeriodoAplicacaoMes({ where: { idVacina } })
         if (periodoMesEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
 
 
