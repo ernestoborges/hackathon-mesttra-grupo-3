@@ -29,7 +29,7 @@ const Vacina = sequelize.define('Vacina', {
     },
 }, {
     tableName: 'vacina',
-    timestamps: false,
+    timestamps: false,
 });
 
 module.exports = {

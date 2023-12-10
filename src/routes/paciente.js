@@ -1,6 +1,8 @@
 const { error } = require("console");
 const { Paciente } = require("../db/models/Paciente");
 const { Router } = require("express");
+const { VacinaAplicada } = require("../db/models/VacinaAplicada");
+const { Vacina } = require("../db/models/Vacina");
 const router = Router();
 
 router.get("/:id", async (req, res) => {
@@ -76,5 +78,83 @@ router.put("/:id", async (req, res) => {
         return res.status(500).json({ message: 'Erro ao atualizar paciente', error });
     }
 });
+
+
+// vacinas apicadas
+router.get("/:id/vacina", async (req, res) => {
+
+    const idPaciente = req.params.id;
+
+    if (!idPaciente) return res.status(400).json({ message: "Parâmetro faltando." });
+
+    try {
+
+        const paciente = await Paciente.findByPk(idPaciente)
+        if (!paciente) return res.status(400).json({ message: "Paciente não encontrado." })
+
+        const vacinasAplicadas = await VacinaAplicada.findAll({
+            where: { id_paciente: idPaciente },
+            include: [Vacina],
+        })
+
+        res.status(200).json(vacinasAplicadas)
+
+    } catch (error) {
+        return res.status(500).json({ message: 'Erro ao buscar vacinas de paciente', error });
+    }
+
+})
+
+router.post("/:id/vacina", async (req, res) => {
+
+    const idPaciente = req.params.id;
+    const { dataAplicacao, idVacina } = req.body;
+
+    if (!idPaciente || !idVacina || !dataAplicacao) return res.status(400).json({ message: "Parâmetro faltando." });
+
+    try {
+
+        const paciente = await Paciente.findByPk(idPaciente)
+        if (!paciente) return res.status(400).json({ message: "Paciente não encontrado." })
+
+        const vacina = await Vacina.findByPk(idVacina);
+        if (!vacina) return res.status(400).json({ message: "Vacina não encontrada." })
+
+        const vacinaAplicada = await VacinaAplicada.create({
+            id_paciente: paciente.id_paciente,
+            id_vacina: vacina.id_vacina,
+            data_aplicacao: dataAplicacao
+        })
+
+        res.status(200).json(vacinaAplicada)
+
+    } catch (error) {
+        return res.status(500).json({ message: 'Erro ao buscar vacinas de paciente', error });
+    }
+
+})
+
+router.delete("/:idPaciente/vacina/:idVacina", async (req, res) => {
+
+    const { idPaciente, idVacina } = req.params;
+
+    if (!idPaciente || !idVacina) return res.status(400).json({ message: "Parâmetro faltando." });
+
+    try {
+
+        const vacinasDeletadas = await VacinaAplicada.destroy({
+            where: {
+                id_paciente: idPaciente,
+                id_vacina: idVacina,
+            },
+        });
+
+        if (!vacinasDeletadas) return res.status(404).json({ error: 'Nenhuma vacina aplicada encontrada para exclusão' });
+
+        return res.status(200).json({ message: 'Vacina aplicada excluída com sucesso' });
+    } catch (error) {
+        return res.status(500).json({ message: 'Erro ao buscar vacinas de paciente', error });
+    }
+})
 
 module.exports = router;

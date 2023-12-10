@@ -12,17 +12,4 @@ router.get("/", async (req, res) => {
     }
 });
 
-
-router.get("/:id", async (req, res) =>{
-    try {
-        const vacinaAplicId = await VacinaAplicada.findOne({
-            where: {VacinaAplicada: req.params.id}
-        });
-        res.status(200).json(vacinaAplicId)
-    } catch (error) {
-        res.status(500).json({ message: `Erro ao buscar vacina. ${error}`})
-    }
-})
-
-
 module.exports = router;

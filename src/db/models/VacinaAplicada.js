@@ -35,6 +35,11 @@ const VacinaAplicada = sequelize.define('VacinaAplicada', {
   timestamps: false,
 });
 
+Paciente.hasMany(VacinaAplicada, { foreignKey: 'id_paciente' });
+VacinaAplicada.belongsTo(Paciente, { foreignKey: 'id_paciente' });
+Vacina.hasMany(VacinaAplicada, { foreignKey: 'id_vacina' });
+VacinaAplicada.belongsTo(Vacina, { foreignKey: 'id_vacina' });
+
 module.exports = {
   VacinaAplicada
 };
