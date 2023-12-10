@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require("../connect")
+const { sequelize } = require("../connect");
+const { Rede } = require('./Rede');
 
 const Vacina = sequelize.define('Vacina', {
     id_vacina: {
@@ -31,6 +32,9 @@ const Vacina = sequelize.define('Vacina', {
     tableName: 'vacina',
     timestamps: false,
 });
+
+Vacina.hasOne(Rede, { foreignKey: 'id_rede' });
+Rede.belongsTo(Vacina, { foreignKey: 'id_rede' });
 
 module.exports = {
     Vacina
