@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require("../connect");
 const { Vacina } = require("./Vacina");
 
-const PeriodoAplicacaoMes = sequelize.define('PeriodoAplicacaoMes', {
+const PeriodoAplicacaoMes = sequelize.define('PAM', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -32,6 +32,9 @@ const PeriodoAplicacaoMes = sequelize.define('PeriodoAplicacaoMes', {
   tableName: 'periodoaplicacaomes',
   timestamps: false,
 });
+
+PeriodoAplicacaoMes.hasOne(Vacina, { foreignKey: 'id_vacina' });
+Vacina.belongsTo(PeriodoAplicacaoMes, { foreignKey: 'id_vacina' });
 
 module.exports = {
   PeriodoAplicacaoMes

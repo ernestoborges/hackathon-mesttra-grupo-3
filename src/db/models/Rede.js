@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require("../connect");
 
-const Rede = sequelize.define('Rede', {
+const Rede = sequelize.define('rede', {
   id_rede: {
     type: DataTypes.INTEGER,
     allowNull: false,
