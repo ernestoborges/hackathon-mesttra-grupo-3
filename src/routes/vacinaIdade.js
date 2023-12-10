@@ -60,10 +60,10 @@ router.post("/ano", async (req, res) => {
     if (!idVacina || !qtdAnoInicial || !qtdAnoFinal || !descricao) return res.status(400).json({ message: "Parametro faltando." })
 
     try {
-        const periodoAnoEncontrado = await PeriodoAplicacaoAno.findAll({ where: { id_vacina: idVacina } })
+        const periodoAnoEncontrado = await PeriodoAplicacaoAno.findOne({ where: { id_vacina: idVacina } })
         if (periodoAnoEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
 
-        const periodoMesEncontrado = await PeriodoAplicacaoMes.findAll({ where: { id_vacina: idVacina } })
+        const periodoMesEncontrado = await PeriodoAplicacaoMes.findOne({ where: { id_vacina: idVacina } })
         if (periodoMesEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
 
 
@@ -153,13 +153,13 @@ router.post("/mes", async (req, res) => {
 
     const { idVacina, qtdMesInicial, qtdMesFinal, descricao } = req.body;
 
-    if (!idVacina || !qtdMesInicial || !qtdMesFinal || !descricao) return res.send(400).json({ message: "Parametro faltando." })
+    if (!idVacina || !qtdMesInicial || !qtdMesFinal || !descricao) return res.status(400).json({ message: "Parametro faltando." })
 
     try {
-        const periodoAnoEncontrado = await PeriodoAplicacaoAno({ where: { idVacina } })
+        const periodoAnoEncontrado = await PeriodoAplicacaoAno.findOne({ where: { id_vacina: idVacina } })
         if (periodoAnoEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
 
-        const periodoMesEncontrado = await PeriodoAplicacaoMes({ where: { idVacina } })
+        const periodoMesEncontrado = await PeriodoAplicacaoMes.findOne({ where: { id_vacina: idVacina } })
         if (periodoMesEncontrado) return res.status(400).json({ message: "periodo de aplicação ja cadastrada para essa vacina" })
 
 
@@ -169,7 +169,7 @@ router.post("/mes", async (req, res) => {
             id_vacina: idVacina,
             qtd_meses_inicial: qtdMesInicial,
             qtd_meses_final: qtdMesFinal,
-            descricao: descricao
+            desc_meses: descricao
         })
 
         return res.status(201).json({ message: "Periodo de vacinação (mes) criado.", periodo: novoPeriodo });
