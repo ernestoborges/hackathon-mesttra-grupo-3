@@ -1,4 +1,3 @@
-const { error } = require("console");
 const { Router } = require("express");
 const router = Router();
 const {VacinaAplicada} = require("../db/models/VacinaAplicada");

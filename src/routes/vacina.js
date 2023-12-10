@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
         const listarVacinas = await Vacina.findAll();
         res.status(200).json(listarVacinas)
     } catch (error) {
-        res.status(500).json({ message: `Erro ao buscar paciente: ${error}` })
+        res.status(500).json({ message: `Erro ao buscar todas as vacinas: ${error}` })
     }
 });
 
