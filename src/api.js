@@ -18,7 +18,12 @@ async function test() {
 test()
 
 
-const port = 3000;
+const port = 3001;
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
 })
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile =require('../swagger/swagger_output.json');
+
+app.use('/minha-rota-de-documentacao', swaggerUi.serve, swaggerUi.setup(swaggerFile))

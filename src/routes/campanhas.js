@@ -1,4 +1,3 @@
-const { error } = require("console");
 const { Campanha } = require("../db/models/Campanha");
 const { Router } = require("express");
 const router = Router();

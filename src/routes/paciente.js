@@ -6,7 +6,7 @@ const { PeriodoAplicacaoMes } = require("../db/models/PeriodoAplicacaoMes");
 const { Op } = require('sequelize');
 const { PeriodoAplicacaoAno } = require("../db/models/PeriodoAplicacaoAno");
 const router = Router();
-const { getDiffMonth, getDiffYear } = require("../utils/date-calcs")
+const { getDiffMonth, getDiffYear } = require("../utils/date-calc")
 
 router.get("/:id", async (req, res) => {
     try {
