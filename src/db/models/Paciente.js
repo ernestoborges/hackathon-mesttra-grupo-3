@@ -19,6 +19,7 @@ const Paciente = sequelize.define('Paciente', {
     tableName: 'paciente',
     timestamps: false,
   });
+  
 
 module.exports = {
     Paciente
